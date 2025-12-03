@@ -1,26 +1,17 @@
-import { useState } from 'react';
-import AnimatedBackground from './components/AnimatedBackground';
-import Navigation from './components/Navigation';
+import React, { useState } from 'react';
 import Hero from './components/Hero';
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
+import ContactModal from './components/ContactModal';
 import About from './components/About';
 import Experience from './components/Experience';
 import Certifications from './components/Certifications';
 import Skills from './components/Skills';
-import ContactModal from './components/ContactModal';
-import Footer from './components/Footer';
+import AnimatedBackground from './components/AnimatedBackground';
 
-/**
- * Main App Component
- * Orchestrates all sections and manages global state
- */
 function App() {
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
-    /**
-     * Download resume PDF
-     * In production, this would download the actual resume file
-     * Currently shows alert as placeholder
-     */
     const handleDownloadResume = () => {
         // Create a link to download the resume
         // In production, place resume.pdf in the /public folder
@@ -43,10 +34,7 @@ function App() {
 
             {/* Main Content - positioned above background */}
             <div className="relative z-10">
-                {/* Navigation */}
                 <Navigation />
-
-                {/* Main Sections */}
                 <main>
                     <Hero
                         onContactClick={() => setIsContactModalOpen(true)}
@@ -57,15 +45,11 @@ function App() {
                     <Certifications />
                     <Skills />
                 </main>
-
-                {/* Footer */}
                 <Footer
                     onContactClick={() => setIsContactModalOpen(true)}
                     onDownloadResume={handleDownloadResume}
                 />
             </div>
-
-            {/* Contact Modal */}
             <ContactModal
                 isOpen={isContactModalOpen}
                 onClose={() => setIsContactModalOpen(false)}
