@@ -22,6 +22,8 @@ const Particles = ({ count = 3000 }) => {
     }, [count]);
 
     useFrame((state) => {
+        if (!mesh.current) return;
+
         const time = state.clock.getElapsedTime();
 
         for (let i = 0; i < count; i++) {
@@ -66,7 +68,7 @@ const Particles = ({ count = 3000 }) => {
 
 const AnimatedBackground = () => {
     return (
-        <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+        <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }}>
             {/* Deep space gradient background */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0A0E27] to-[#050816]" />
 
