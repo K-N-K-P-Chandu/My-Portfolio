@@ -34,7 +34,7 @@ function App() {
 
             {/* Main Content - positioned above background */}
             <div className="relative z-10">
-                <Navigation />
+                <Navigation onContactClick={() => setIsContactModalOpen(true)} />
                 <main>
                     <Hero
                         onContactClick={() => setIsContactModalOpen(true)}

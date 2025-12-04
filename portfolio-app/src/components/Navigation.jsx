@@ -6,7 +6,7 @@ import { useScrollTo } from '../hooks/useParallax';
  * Navigation component with responsive mobile menu
  * Features smooth scrolling, active section highlighting, and glass morphism design
  */
-const Navigation = () => {
+const Navigation = ({ onContactClick }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
@@ -44,7 +44,11 @@ const Navigation = () => {
     }, []);
 
     const handleNavClick = (sectionId) => {
-        scrollTo(sectionId);
+        if (sectionId === 'contact') {
+            if (onContactClick) onContactClick();
+        } else {
+            scrollTo(sectionId);
+        }
         setIsMobileMenuOpen(false);
     };
 
@@ -82,8 +86,8 @@ const Navigation = () => {
                                 key={item.id}
                                 onClick={() => handleNavClick(item.id)}
                                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${activeSection === item.id
-                                        ? 'text-primary bg-primary/10'
-                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                    ? 'text-primary bg-primary/10'
+                                    : 'text-gray-300 hover:text-white hover:bg-white/5'
                                     }`}
                                 aria-label={`Navigate to ${item.label}`}
                                 aria-current={activeSection === item.id ? 'page' : undefined}
@@ -133,8 +137,8 @@ const Navigation = () => {
                                     key={item.id}
                                     onClick={() => handleNavClick(item.id)}
                                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 ${activeSection === item.id
-                                            ? 'text-primary bg-primary/10'
-                                            : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                        ? 'text-primary bg-primary/10'
+                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
                                         }`}
                                     aria-label={`Navigate to ${item.label}`}
                                 >

@@ -1,45 +1,127 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const AnimatedBackground = () => {
-    return (
-        <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }}>
-            {/* Deep space gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0A0E27] to-[#050816]" />
+    const canvasRef = useRef(null);
 
-            {/* CSS Stars */}
-            <div className="absolute inset-0 opacity-50">
-                {[...Array(50)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute rounded-full bg-white"
-                        style={{
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`,
-                            width: `${Math.random() * 3 + 1}px`,
-                            height: `${Math.random() * 3 + 1}px`,
-                            opacity: Math.random(),
-                            animation: `float ${Math.random() * 10 + 10}s linear infinite`,
-                            animationDelay: `-${Math.random() * 10}s`
-                        }}
-                    />
-                ))}
-            </div>
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+        let particles = [];
 
-            {/* Vignette overlay */}
-            <div
-                className="absolute inset-0"
-                style={{
-                    background: 'radial-gradient(circle at center, transparent 0%, rgba(5,8,22,0.8) 100%)',
-                }}
-            />
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
 
-            <style jsx>{`
-                @keyframes float {
-                    0% { transform: translateY(0px); }
-                    100% { transform: translateY(-100vh); }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Particle class
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height; // Start below or random
+                this.size = Math.random() * 2 + 0.5; // Random size
+                this.speedY = Math.random() * 1 + 0.2; // Move up speed
+                this.speedX = (Math.random() - 0.5) * 0.5; // Slight drift
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.color = Math.random() > 0.8 ? '#00d9ff' : '#ffffff'; // Cyan or White
+            }
+
+            update() {
+                this.y -= this.speedY; // Move up (Antigravity)
+                this.x += this.speedX;
+
+                // Reset if off screen (top)
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
                 }
-            `}</style>
-        </div>
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Initialize particles
+        const init = () => {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth * 0.1, 150); // Responsive count
+            for (let i = 0; i < particleCount; i++) {
+                const p = new Particle();
+                p.y = Math.random() * canvas.height; // Initial random spread
+                particles.push(p);
+            }
+        };
+
+        init();
+
+        // Animation loop
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw gradient background via canvas for better blending
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#050816');
+            gradient.addColorStop(0.5, '#0A0E27');
+            gradient.addColorStop(1, '#050816');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Connect particles with lines if close (Constellation effect)
+            particles.forEach((p1, i) => {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = p1.color;
+                        ctx.globalAlpha = (1 - distance / 100) * 0.15;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            });
+
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        animate();
+
+        return () => {
+            window.removeEventListener('resize', resizeCanvas);
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="fixed inset-0 pointer-events-none"
+            style={{ zIndex: -1 }}
+        />
     );
 };
 

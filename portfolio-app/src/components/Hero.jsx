@@ -10,9 +10,25 @@ const Hero = ({ onContactClick, onDownloadResume }) => {
                 <h2 className="text-2xl text-gray-300 mb-4">
                     {personalInfo.title}
                 </h2>
-                <p className="text-blue-400">
+                <p className="text-blue-400 mb-8">
                     {personalInfo.tagline}
                 </p>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                    <button
+                        onClick={onContactClick}
+                        className="px-8 py-4 bg-blue-600 rounded-lg font-semibold text-white hover:bg-blue-700 transition-colors"
+                    >
+                        Get In Touch
+                    </button>
+
+                    <button
+                        onClick={onDownloadResume}
+                        className="px-8 py-4 bg-gray-800 rounded-lg font-semibold text-white border border-gray-600 hover:bg-gray-700 transition-colors"
+                    >
+                        Download Resume
+                    </button>
+                </div>
             </div>
         </section>
     );

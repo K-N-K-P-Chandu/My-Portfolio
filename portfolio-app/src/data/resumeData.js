@@ -6,8 +6,8 @@ export const personalInfo = {
     tagline: "Fortifying Data. Automating Intelligence.",
     phone: "+1 (312)-684-6425",
     email: "nagakrishna.c5@gmail.com",
-    linkedin: "https://www.linkedin.com/in/your-profile", // Update with actual LinkedIn
-    github: "https://github.com/your-profile", // Update with actual GitHub
+    linkedin: "https://www.linkedin.com/in/naga-krishna-p-c-kovelamudi-8b532936b",
+    github: "https://github.com/K-N-K-P-Chandu",
 };
 
 export const summary = `Results-oriented Data Engineer with 5+ years' experience developing and optimizing end-to-end data solutions on leading cloud platforms (AWS, GCP, Azure). Skilled in Spark, Airflow, Python, and SQL, with growing expertise in AI-integrated data systems leveraging LLMs, vector databases, and RAG pipelines. Proven track record of deploying scalable ETL processes that enhance data accessibility, reduce latency, and support advanced analytics and AI applications. Adept at partnering with cross-functional teams to deliver actionable insights, improve reliability, and create tangible business value.`;
