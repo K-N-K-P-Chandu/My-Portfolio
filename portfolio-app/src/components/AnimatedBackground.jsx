@@ -8,6 +8,7 @@ const AnimatedBackground = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let particles = [];
+        let mouse = { x: null, y: null };
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
@@ -16,6 +17,13 @@ const AnimatedBackground = () => {
 
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
+
+        // Track mouse position
+        const handleMouseMove = (event) => {
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+        };
+        window.addEventListener('mousemove', handleMouseMove);
 
         // Particle class
         class Particle {
@@ -31,11 +39,35 @@ const AnimatedBackground = () => {
                 this.speedX = (Math.random() - 0.5) * 0.5; // Slight drift
                 this.opacity = Math.random() * 0.5 + 0.1;
                 this.color = Math.random() > 0.8 ? '#00d9ff' : '#ffffff'; // Cyan or White
+
+                // Store base position for parallax
+                this.baseX = this.x;
+                this.baseY = this.y;
             }
 
             update() {
-                this.y -= this.speedY; // Move up (Antigravity)
+                // Normal movement
+                this.y -= this.speedY;
                 this.x += this.speedX;
+
+                // Mouse Interaction (Repulsion)
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    const forceRadius = 150;
+
+                    if (distance < forceRadius) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (forceRadius - distance) / forceRadius;
+                        const directionX = forceDirectionX * force * 3; // Strength
+                        const directionY = forceDirectionY * force * 3;
+
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    }
+                }
 
                 // Reset if off screen (top)
                 if (this.y < -10) {
@@ -112,6 +144,7 @@ const AnimatedBackground = () => {
 
         return () => {
             window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('mousemove', handleMouseMove);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);
