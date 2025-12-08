@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import ContactModal from './components/ContactModal';
 import About from './components/About';
 import Experience from './components/Experience';
+import Education from './components/Education';
 import Certifications from './components/Certifications';
 import Skills from './components/Skills';
 import AnimatedBackground from './components/AnimatedBackground';
@@ -42,6 +43,7 @@ function App() {
                     />
                     <About />
                     <Experience />
+                    <Education />
                     <Certifications />
                     <Skills />
                 </main>

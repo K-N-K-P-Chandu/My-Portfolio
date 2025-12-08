@@ -88,7 +88,7 @@ export const skills = {
 export const experience = [
     {
         id: 1,
-        company: "TCS/AIG",
+        company: "TCS",
         location: "Milford, OH",
         position: "Data Engineer",
         period: "Dec 2023 - Present",
@@ -107,8 +107,8 @@ export const experience = [
     },
     {
         id: 2,
-        company: "USAA",
-        location: "Plano, TX",
+        company: "Meta",
+        location: "Hyderabad",
         position: "Data Engineer",
         period: "Jan 2022 – Nov 2022",
         responsibilities: [
@@ -130,7 +130,7 @@ export const experience = [
     },
     {
         id: 3,
-        company: "Heritage Foods Ltd.",
+        company: "Heritage Foods",
         location: "Hyderabad",
         position: "Data Engineer",
         period: "Jul 2019 – Nov 2021",
@@ -154,15 +154,13 @@ export const education = [
         id: 1,
         institution: "ILLINOIS INSTITUTE OF TECHNOLOGY",
         location: "Chicago, IL",
-        degree: "Master of Computer Science",
-        period: "January 2023 - December 2024"
+        degree: "Master of Computer Science"
     },
     {
         id: 2,
         institution: "K.L. UNIVERSITY",
         location: "Andhra Pradesh",
-        degree: "Bachelor of Technology (B. Tech)",
-        period: "June 2015 - May 2019"
+        degree: "Bachelor of Technology (E.C.E)"
     }
 ];
 

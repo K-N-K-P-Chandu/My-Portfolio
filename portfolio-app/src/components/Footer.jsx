@@ -12,6 +12,7 @@ const Footer = ({ onContactClick, onDownloadResume }) => {
         { id: 'home', label: 'Home' },
         { id: 'about', label: 'About' },
         { id: 'experience', label: 'Experience' },
+        { id: 'education', label: 'Education' },
         { id: 'certifications', label: 'Certifications' },
         { id: 'skills', label: 'Skills' },
     ];
