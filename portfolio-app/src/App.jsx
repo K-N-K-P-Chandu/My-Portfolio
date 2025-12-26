@@ -9,6 +9,9 @@ import Education from './components/Education';
 import Certifications from './components/Certifications';
 import Skills from './components/Skills';
 import AnimatedBackground from './components/AnimatedBackground';
+import Chatbot from './components/Chatbot';
+
+
 
 function App() {
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -56,6 +59,7 @@ function App() {
                 isOpen={isContactModalOpen}
                 onClose={() => setIsContactModalOpen(false)}
             />
+            <Chatbot />
         </div>
     );
 }

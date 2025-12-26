@@ -1,5 +1,7 @@
 import { personalInfo } from '../data/resumeData';
 
+import profileImg from '../assets/profile.png';
+
 const Hero = ({ onContactClick, onDownloadResume }) => {
     return (
         <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8">
@@ -8,7 +10,7 @@ const Hero = ({ onContactClick, onDownloadResume }) => {
                 <div className="mb-8 relative inline-block group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
                     <img
-                        src="/profile.png"
+                        src={profileImg}
                         alt={personalInfo.name}
                         className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-dark-card shadow-2xl"
                     />

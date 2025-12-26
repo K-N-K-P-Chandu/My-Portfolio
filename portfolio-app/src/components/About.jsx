@@ -3,6 +3,8 @@ import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { summary, personalInfo } from '../data/resumeData';
 
+
+
 /**
  * About section component
  * Displays professional summary with animated entrance
