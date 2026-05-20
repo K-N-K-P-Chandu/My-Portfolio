@@ -1,5 +1,3 @@
-// Resume data extracted from the provided resume document
-
 export const personalInfo = {
     name: "NAGA KRISHNA POORNA CHANDU KOVELAMUDI",
     title: "Data Engineer",
@@ -10,7 +8,7 @@ export const personalInfo = {
     github: "https://github.com/K-N-K-P-Chandu",
 };
 
-export const summary = `Results-oriented Data Engineer with 5+ years' experience developing and optimizing end-to-end data solutions on leading cloud platforms (AWS, GCP, Azure). Skilled in Spark, Airflow, Python, and SQL, with growing expertise in AI-integrated data systems leveraging LLMs, vector databases, and RAG pipelines. Proven track record of deploying scalable ETL processes that enhance data accessibility, reduce latency, and support advanced analytics and AI applications. Adept at partnering with cross-functional teams to deliver actionable insights, improve reliability, and create tangible business value.`;
+export const summary = `Results-oriented Data Engineer with 5+ years' experience developing and optimizing end-to-end data solutions on leading cloud platforms (AWS, GCP, Azure). Skilled in Spark, Airflow, Python, and SQL, with growing expertise in AI-integrated data systems leveraging LLMs, vector databases, and RAG pipelines. Proven track record of deploying scalable ETL processes and AI solutions—including production RAG systems using Azure Prompt Flow—that enhance data accessibility, reduce latency, and support advanced analytics and AI applications. Adept at partnering with cross-functional teams to deliver actionable insights, improve reliability, and create tangible business value.`;
 
 export const skills = {
     "Programming Languages": ["Python", "SQL", "Scala", "R"],
@@ -89,51 +87,59 @@ export const experience = [
     {
         id: 1,
         company: "TCS",
-        location: "Milford, OH",
-        position: "Data Engineer",
-        period: "Dec 2023 - Present",
+        location: "",
+        position: "Data Engineer (Contract)",
+        period: "Nov 2025 - Present",
         responsibilities: [
-            "Designed, implemented, and maintained scalable data pipelines using AWS services including S3, Redshift, Glue, Lambda, Kinesis, Athena, and Step Functions to automate ETL workflows and orchestrate end-to-end data processing for enterprise analytics.",
-            "Developed and managed data infrastructure including data lakes, data warehouses, and data marts, ensuring optimal data storage, retrieval, and accessibility for business intelligence and reporting needs.",
-            "Integrated Unity Catalog with Apache Spark and Delta Lake within Databricks to establish robust data governance, implement data lineage tracking, and ensure traceability from source to destination across all data workflows.",
-            "Built end-to-end Retrieval-Augmented Generation (RAG) pipelines using LangChain and LangGraph to power intelligent customer service applications, enabling real-time retrieval of flight information, policies, and operational documentation.",
-            "Designed and deployed vector-based search systems using FAISS and Milvus vector databases to enable semantic search across internal documents, SOPs, FAQs, and maintenance logs for context-aware data retrieval.",
-            "Developed FastAPI-based microservices to expose AI-powered endpoints integrated with Large Language Models (LLMs) through AWS.",
-            "Processed and transformed high-volume datasets including customer support tickets, operational logs, and transactional data for machine learning model training, LLM fine-tuning, and generative AI applications.",
-            "Implemented data backup, recovery, and disaster recovery processes using AWS S3 and Redshift Snapshots to ensure data availability, integrity, and compliance with enterprise data retention policies.",
-            "Collaborated with cross-functional teams including data scientists, DevOps, and business stakeholders to deliver phased data projects on time and within budget, identifying task dependencies and managing project timelines effectively."
+            "Built Smart Search Tools: Developed RAG (Retrieval-Augmented Generation) systems using Python that allow users to ask natural language questions and get accurate answers from internal documents.",
+            "Connected AI Agents: Implemented the Model Context Protocol (MCP) to standardize how AI agents securely access and read our company's data, making integration faster and safer.",
+            "Automated Data Pipelines: Wrote Python scripts to automatically collect, clean, and move data from various sources into our databases for AI analysis.",
+            "Organized Data for AI: Processed and stored text data in Vector Databases (like FAISS or ChromaDB) so that AI models can easily find and understand the information.",
+            "Created Fast APIs: Built lightweight web services using FastAPI to connect our data pipelines with user-facing applications and AI models.",
+            "Ensured Data Quality: Wrote code to constantly check data accuracy, ensuring that the AI models are learning from clean and reliable information.",
+            "Collaborated with Teams: Worked closely with data scientists to prepare the specific datasets they needed to train and test their machine learning models."
         ],
-        technologies: ["S3", "Lambda", "AWS Kinesis", "Amazon Redshift", "AWS Glue", "CloudFormation", "Data Lakes", "Data Warehouses", "Athena", "RAG", "LangChain", "FAISS", "Milvus", "FastAPI"]
+        technologies: ["Python", "RAG", "MCP", "FAISS", "ChromaDB", "FastAPI"]
     },
     {
         id: 2,
-        company: "Meta",
-        location: "Hyderabad",
-        position: "Data Engineer",
-        period: "Jan 2022 – Nov 2022",
+        company: "Model Earth",
+        location: "",
+        position: "AI Data Engineer",
+        period: "Feb 2025 - Oct 2025",
         responsibilities: [
-            "Implemented data partitioning, compression, and folder structures to optimize storage.",
-            "Developed dimensional and normalized data models in Azure Synapse Analytics.",
-            "Designed Delta Lake tables with ACID compliance for reliable data processing.",
-            "Implemented data retention and archival policies for compliance and cost optimization.",
-            "Developed custom UDFs in PySpark to handle complex business rules.",
-            "Mentored and guided junior engineers in best practices for Azure data engineering, coding standards, pipeline design, and troubleshooting, fostering knowledge sharing and strengthening the team's technical capabilities.",
-            "Leveraged Power BI and Tableau integration with Synapse and Databricks to create dashboards and interactive visualizations that translate complex data into clear insights for executives and operational teams.",
-            "Integrated Git and Azure DevOps with ADF and Databricks for version control.",
-            "Automated deployment pipelines using YAML and ARM templates.",
-            "Designed cost-effective, scalable data solutions by analyzing cloud consumption patterns, optimizing storage tiers, implementing auto-scaling clusters, and applying efficient data partitioning strategies to minimize Azure resource costs.",
-            "Implemented data lineage, cataloging, and metadata management using Azure Purview to provide visibility into data flows, improve governance, ensure compliance, and facilitate data discovery across enterprise systems.",
-            "Orchestrated machine learning workflows in Databricks integrated with ADF pipelines.",
-            "Tuned Spark configurations for optimized cluster resource utilization."
+            "Built Interactive Visualizations: Designed and developed the \"LocalSite\" web interface using D3.js and Leaflet to visualize complex environmental data (like Carbon Dioxide emissions) on interactive timelines and maps.",
+            "Automated Data Collection: Created automated workflows using Azure Data Factory and Python to fetch, clean, and organize data from Google Data Commons so it is ready for analysis.",
+            "Managed Cloud Data: Set up and maintained secure storage systems using Azure Blob Storage and Synapse Analytics to keep large datasets organized and easily accessible for the team.",
+            "Developed AI Features: Built smart \"Chat with Data\" tools using LangChain (RAG) that allow users to ask natural language questions and get accurate answers from internal documents.",
+            "Improved Search Systems: Implemented Vector Search (using FAISS) to help users find specific information inside reports and logs much faster than traditional search methods.",
+            "Created API Services: Built fast and reliable web services using FastAPI to connect the front-end graph interface with backend AI models and databases."
         ],
-        technologies: ["Databricks", "ETL/ELT", "Azure Blob Storage", "Data Lake Storage Gen2", "SQL Database", "REST APIs", "Azure Synapse", "Power BI", "Tableau", "Azure DevOps"]
+        technologies: ["D3.js", "Leaflet", "Azure Data Factory", "Python", "Azure Blob Storage", "Synapse Analytics", "LangChain", "RAG", "FAISS", "FastAPI"]
     },
     {
         id: 3,
-        company: "Heritage Foods",
-        location: "Hyderabad",
+        company: "Meta",
+        location: "",
         position: "Data Engineer",
-        period: "Jul 2019 – Nov 2021",
+        period: "Jan 2022 - Nov 2022",
+        responsibilities: [
+            "Optimized Performance & Cost: Tuned Spark configurations, implemented auto-scaling, and applied efficient partitioning/compression strategies to minimize Azure resource costs.",
+            "Architected Data Models: Designed dimensional models in Azure Synapse and ACID-compliant Delta Lake tables, using custom PySpark UDFs for complex business logic.",
+            "Enforced Governance: Implemented Azure Purview for data lineage and cataloging, alongside automated retention policies for compliance.",
+            "Automated CI/CD: Built deployment pipelines using Azure DevOps, Git, YAML, and ARM templates for version control across ADF and Databricks.",
+            "Delivered BI Insights: Integrated Synapse/Databricks with Power BI and Tableau to create scalable executive dashboards.",
+            "Orchestrated ML Workflows: Integrated Databricks machine learning models into Azure Data Factory pipelines for automated execution.",
+            "Mentored Team: Guided junior engineers on Azure best practices, pipeline design, and troubleshooting standards."
+        ],
+        technologies: ["Databricks", "ETL/ELT", "Azure Blob Storage", "Data Lake Storage Gen2", "SQL Database", "REST APIs", "Azure Synapse", "PySpark", "Azure Purview", "Azure DevOps", "Power BI", "Tableau"]
+    },
+    {
+        id: 4,
+        company: "Heritage Foods Ltd",
+        location: "",
+        position: "Data Engineer",
+        period: "Jul 2019 - Dec 2021",
         responsibilities: [
             "Implemented AI/ML model deployments using TensorFlow/Keras for real-time predictions on streaming data, collaborating closely with data scientists to optimize model performance.",
             "Automated the deployment and scaling of data processing applications using Docker and Kubernetes, ensuring resilience and fault tolerance in cloud environments.",
@@ -154,13 +160,15 @@ export const education = [
         id: 1,
         institution: "ILLINOIS INSTITUTE OF TECHNOLOGY",
         location: "Chicago, IL",
-        degree: "Master of Computer Science"
+        degree: "Master of Computer Science",
+        period: "Jan 2023 - Dec 2024"
     },
     {
         id: 2,
         institution: "K.L. UNIVERSITY",
         location: "Andhra Pradesh",
-        degree: "Bachelor of Technology (E.C.E)"
+        degree: "Bachelor of Technology (E.C.E)",
+        period: "June 2015 - May 2019"
     }
 ];
 
@@ -170,20 +178,20 @@ export const certifications = [
         title: "AWS Certified Cloud Practitioner",
         issuer: "Amazon Web Services",
         date: "2024",
-        credentialUrl: "#" // Update with actual credential URL
+        credentialUrl: "#"
     },
     {
         id: 2,
         title: "AWS Certified Solutions Architect - Associate",
         issuer: "Amazon Web Services",
         date: "2024",
-        credentialUrl: "#" // Update with actual credential URL
+        credentialUrl: "#"
     },
     {
         id: 3,
         title: "CompTIA Security+",
         issuer: "CompTIA",
         date: "2024",
-        credentialUrl: "#" // Update with actual credential URL
+        credentialUrl: "#"
     }
 ];

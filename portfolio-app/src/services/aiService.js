@@ -21,8 +21,8 @@ const fuzzyMatch = (input, target, maxDistance = 2) => {
     // Exact match optimization
     if (cleanInput === cleanTarget) return true;
     // Substring check (if sufficient length)
-    if (cleanTarget.length > 4 && cleanInput.includes(cleanTarget)) return true;
-    if (cleanInput.length > 4 && cleanTarget.includes(cleanInput)) return true;
+    if (cleanTarget.length > 3 && cleanInput.includes(cleanTarget)) return true;
+    if (cleanInput.length > 3 && cleanTarget.includes(cleanInput)) return true;
 
     if (Math.abs(cleanInput.length - cleanTarget.length) > maxDistance) return false;
 
@@ -176,6 +176,7 @@ const cosineSimilarity = (a, b) => {
 
 export const aiService = {
     isInitialized: false,
+    isFallbackMode: false,
 
     async init() {
         if (this.isInitialized) return;
@@ -185,19 +186,31 @@ export const aiService = {
             extractor = await pipeline('feature-extraction', MODEL_NAME, {
                 quantized: true,
             });
+            console.log('Model loaded.');
+        } catch (error) {
+            console.warn('Failed to load AI model, falling back to keyword search.', error);
+            this.isFallbackMode = true;
+        }
 
-            console.log('Model loaded. Indexing data...');
+        try {
+            console.log('Indexing data...');
             const chunks = prepareResumeChunks();
 
-            // Generate embeddings
+            // Generate embeddings only if model matched
             for (const chunk of chunks) {
-                const output = await extractor(chunk.text, { pooling: 'mean', normalize: true });
-                chunk.embedding = output.data;
+                if (!this.isFallbackMode && extractor) {
+                    try {
+                        const output = await extractor(chunk.text, { pooling: 'mean', normalize: true });
+                        chunk.embedding = output.data;
+                    } catch (e) {
+                        console.warn('Failed to embed chunk:', chunk.metadata);
+                    }
+                }
                 resumeEmbeddings.push(chunk);
             }
 
             this.isInitialized = true;
-            console.log(`AI Service Initialized with ${resumeEmbeddings.length} chunks.`);
+            console.log(`AI Service Initialized with ${resumeEmbeddings.length} chunks. Fallback Mode: ${this.isFallbackMode}`);
         } catch (error) {
             console.error('Failed to initialize AI Service:', error);
             throw error;
@@ -206,7 +219,6 @@ export const aiService = {
 
     async query(userQuery) {
         if (!this.isInitialized) {
-            // Handle race condition where user types before load
             await this.init();
         }
 
@@ -214,78 +226,100 @@ export const aiService = {
             const lowerQuery = userQuery.toLowerCase().trim();
             const queryWords = lowerQuery.split(/\s+/).filter(w => w.length > 2); // Split and filter short words
 
-            // 1. Embed the query
-            const output = await extractor(userQuery, { pooling: 'mean', normalize: true });
-            const queryEmbedding = output.data;
+            let queryEmbedding = null;
+            if (!this.isFallbackMode && extractor) {
+                try {
+                    const output = await extractor(userQuery, { pooling: 'mean', normalize: true });
+                    queryEmbedding = output.data;
+                } catch (e) {
+                    console.warn('Failed to embed query, using keywords only.');
+                    queryEmbedding = null;
+                }
+            }
 
-            // 2. Compute Hybrid Score (Cosine + Fuzzy Keyword Boost)
+            // Compute Scores
             const scoredChunks = resumeEmbeddings.map(chunk => {
-                const cosine = cosineSimilarity(queryEmbedding, chunk.embedding);
+                let cosine = 0;
+                if (queryEmbedding && chunk.embedding) {
+                    cosine = cosineSimilarity(queryEmbedding, chunk.embedding);
+                }
 
                 // Fuzzy Keyword match logic
                 let keywordMatchScore = 0;
 
                 if (chunk.keywords) {
-                    // Check if any query word loosely matches any chunk keyword
-                    // We sum up matches but cap it
                     let matchesFound = 0;
 
                     for (const qWord of queryWords) {
-                        // Check against all keywords in chunk
                         const hasMatch = chunk.keywords.some(k => fuzzyMatch(qWord, k, 2));
                         if (hasMatch) matchesFound++;
                     }
 
                     if (matchesFound > 0) {
                         keywordMatchScore = 0.25 * matchesFound;
-                        // Boost specifically for "experience" if it's the main word
-                        if (fuzzyMatch(lowerQuery, 'experience', 2) && chunk.keywords.includes('years')) {
-                            keywordMatchScore += 0.3; // Specific boost for "years of experience" query
+
+                        // Boost for "experience" queries
+                        if (fuzzyMatch(lowerQuery, 'experience', 2)) {
+                            // Boost if chunk is about years of experience or general overview
+                            if (chunk.keywords.includes('years') || chunk.metadata === 'Experience Overview') {
+                                keywordMatchScore += 0.4;
+                            }
+                            // Boost specific company chunks too if query mentions 'work' or 'jobs'
+                            if (chunk.metadata.startsWith('Experience -') && (lowerQuery.includes('work') || lowerQuery.includes('job'))) {
+                                keywordMatchScore += 0.2;
+                            }
                         }
                     }
                 }
 
                 // Cap total boost
-                if (keywordMatchScore > 0.8) keywordMatchScore = 0.8;
+                if (keywordMatchScore > 0.9) keywordMatchScore = 0.9;
+
+                // If in fallback mode, we rely purely on keyword score. 
+                // We give it a base boost so it crosses thresholds easily if matched.
+                let finalScore = cosine + keywordMatchScore;
+                if (this.isFallbackMode) {
+                    finalScore = keywordMatchScore;
+                }
 
                 return {
                     ...chunk,
                     originalScore: cosine,
-                    score: cosine + keywordMatchScore
+                    score: finalScore
                 };
             });
 
-            // 3. Sort by score
+            // Sort by score
             scoredChunks.sort((a, b) => b.score - a.score);
 
             const bestMatch = scoredChunks[0];
             const runnerUp = scoredChunks[1];
 
             console.log('Query:', userQuery);
-            console.log('Best match:', bestMatch.metadata, 'Score:', bestMatch.score.toFixed(3), 'Original:', bestMatch.originalScore.toFixed(3));
+            console.log('Best match:', bestMatch.metadata, 'Score:', bestMatch.score.toFixed(3));
 
-            // 4. Guardrails
-            // If even with boost we are low, fallback. 
-            // Note: with boost, relevant chunks should be > 0.4 easily.
-            if (bestMatch.score < SIMILARITY_THRESHOLD) {
+            // Guardrails
+            // In fallback mode, we might need a slightly different threshold or trust matches > 0
+            const threshold = this.isFallbackMode ? 0.2 : SIMILARITY_THRESHOLD;
+
+            if (bestMatch.score < threshold) {
                 return {
                     answer: "I used my internal knowledge base but couldn't find a direct answer. Please ask specifically about my Skills (e.g., Python, AWS), Experience (e.g., TCS, Meta), or Contact info.",
                     isFallback: true
                 };
             }
 
-            // 5. Intelligent Result Formatting
+            // Intelligent Result Formatting
             let finalAnswer = bestMatch.text;
 
-            // Heuristic for combining short related facts
             if (runnerUp &&
-                runnerUp.score > (bestMatch.score - 0.15) &&
-                runnerUp.score > SIMILARITY_THRESHOLD &&
+                runnerUp.score > (bestMatch.score - 0.2) && // Relaxed diff
+                runnerUp.score > threshold &&
                 runnerUp.metadata !== bestMatch.metadata &&
                 !runnerUp.metadata.includes('Overview') &&
                 !bestMatch.metadata.includes('Overview')
             ) {
-                if ((finalAnswer.length + runnerUp.text.length) < 600) {
+                if ((finalAnswer.length + runnerUp.text.length) < 800) {
                     finalAnswer += "\n\n" + runnerUp.text;
                 }
             }
